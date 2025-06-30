@@ -9,10 +9,15 @@ model = joblib.load("backend/house_price_model.pkl")
 
 app = FastAPI()
 
+origins = [
+    "https://casaquant.vercel.app",  # ✅ Allow your frontend origin
+    "http://localhost:3000",          # ✅ Optional: for local development
+]
+
 # Enable CORS for React (dev)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # React dev server
+    allow_origins=origins, 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
