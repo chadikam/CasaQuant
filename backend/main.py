@@ -5,7 +5,7 @@ import numpy as np
 from fastapi.middleware.cors import CORSMiddleware
 
 
-model = joblib.load("house_price_model.pkl")
+model = joblib.load("backend/house_price_model.pkl")
 
 app = FastAPI()
 
