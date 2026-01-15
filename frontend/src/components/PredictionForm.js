@@ -530,6 +530,20 @@ const PredictionForm = () => {
         <div className="blur-shape shape-3"></div>
       </div>
       
+      {isLoading && (
+        <div className="loading-overlay">
+          <div className="loading-content">
+            <div className="loading-spinner"></div>
+            <h2>Analyzing Your Property...</h2>
+            <p className="loading-tip">
+              💡 Please be patient, this may take 1-2 minutes.
+              <br />
+              Our backend service is waking up from sleep mode.
+            </p>
+          </div>
+        </div>
+      )}
+      
       {renderProgressBar()}
       
       <form onSubmit={handleSubmit} className="prediction-form">
@@ -549,7 +563,7 @@ const PredictionForm = () => {
                 Next
               </button>
             ) : (
-              <button type="submit" className="nav-button submit">
+              <button type="submit" className="nav-button submit" disabled={isLoading}>
                 Submit
               </button>
             )}
