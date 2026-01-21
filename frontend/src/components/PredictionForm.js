@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './PredictionForm.css';
 import tunisiaRegions from '../assets/tunisia_regions_data.js';
+import { predictHousePrice } from '../utils/modelInference.js';
 
 const PredictionForm = () => {
   const [step, setStep] = useState(1);
@@ -145,28 +146,19 @@ const PredictionForm = () => {
       setPredictionError(null);
       
       try {
-        const response = await fetch('https://casaquant.onrender.com/predict', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            category: parseInt(formData.category),
-            type: formData.purpose === 1 ? 1 : 0,
-            city: parseInt(formData.city),
-            region: parseInt(formData.region),
-            room_count: parseInt(formData.rooms),
-            bathroom_count: parseInt(formData.bathrooms),
-            size: parseFloat(formData.size)
-          })
-        });
+        // Use local model inference instead of API call
+        const inputData = {
+          category: parseInt(formData.category),
+          type: formData.purpose === 1 ? 1 : 0,
+          city: parseInt(formData.city),
+          region: parseInt(formData.region),
+          room_count: parseInt(formData.rooms),
+          bathroom_count: parseInt(formData.bathrooms),
+          size: parseFloat(formData.size)
+        };
 
-        if (!response.ok) {
-          throw new Error('Failed to get prediction');
-        }
-
-        const result = await response.json();
-        setPredictedPrice(result.predicted_price);
+        const predictedPrice = await predictHousePrice(inputData);
+        setPredictedPrice(predictedPrice);
         setStep(6);
       } catch (error) {
         console.error('Prediction error:', error);

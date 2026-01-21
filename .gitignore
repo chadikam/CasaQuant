@@ -1,8 +1,11 @@
+# Backend (not needed for production)
+backend/
+
 # Python
 *.pyc
 __pycache__/
 .env
-
+*.pkl
 
 # React
 node_modules/
