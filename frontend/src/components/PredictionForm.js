@@ -193,16 +193,13 @@ const PredictionForm = () => {
   };
 
   const renderProgressBar = () => {
+    if (step === 6) return null;
+    
     return (
       <div className="progress-bar">
         {[...Array(totalSteps)].map((_, index) => (
           <div key={index} className="progress-step">
-            <div className={`step-circle ${index + 1 <= step ? 'active' : ''}`}>
-              {index + 1}
-            </div>
-            {(index < totalSteps - 1 || index === totalSteps - 1) && (
-              <div className={`step-line ${index + 1 < step ? 'active' : ''}`} />
-            )}
+            <div className={`step-circle ${index + 1 <= step ? 'active' : ''}`} />
           </div>
         ))}
       </div>
@@ -219,7 +216,7 @@ const PredictionForm = () => {
             exit={{ opacity: 0, x: -20 }}
             className="form-step"
           >
-            <h2>What's your purpose?</h2>
+            <h2>Are you buying or renting?</h2>
             <div className="form-group">
               <div className="purpose-buttons">
                 <button
@@ -247,7 +244,7 @@ const PredictionForm = () => {
                   Renting
                 </button>
               </div>
-              {errors.purpose && <div className="error-message" style={{ textAlign: 'center' }}>{errors.purpose}</div>}
+              {errors.purpose && <div className="error-message">{errors.purpose}</div>}
             </div>
           </motion.div>
         );
@@ -260,7 +257,7 @@ const PredictionForm = () => {
             exit={{ opacity: 0, x: -20 }}
             className="form-step"
           >
-            <h2>Select Property Category</h2>
+            <h2>Property type</h2>
             <div className="form-group">
               <select
                 value={formData.category}
@@ -273,13 +270,13 @@ const PredictionForm = () => {
                 className={`form-select ${errors.category ? 'error' : ''}`}
                 required
               >
-                <option value="" disabled>Select a category</option>
-                <option value="0">Appartements</option>
-                <option value="1">Bureaux et Plateaux</option>
-                <option value="2">Colocations</option>
-                <option value="3">Locations de vacances</option>
-                <option value="4">Magasins, Commerces et Locaux industriels</option>
-                <option value="5">Maisons et Villas</option>
+                <option value="" disabled>Select property type</option>
+                <option value="0">Apartment</option>
+                <option value="1">Office Space</option>
+                <option value="2">Shared Housing</option>
+                <option value="3">Vacation Rental</option>
+                <option value="4">Commercial Property</option>
+                <option value="5">House / Villa</option>
               </select>
               {errors.category && <div className="error-message">{errors.category}</div>}
             </div>
@@ -294,7 +291,7 @@ const PredictionForm = () => {
             exit={{ opacity: 0, x: -20 }}
             className="form-step"
           >
-            <h2>Location Details</h2>
+            <h2>Location</h2>
             <div className="location-inputs">
               <div className="form-group">
                 <div className="search-input-container">
@@ -313,13 +310,12 @@ const PredictionForm = () => {
                       setFilteredCities(cityOptions);
                     }}
                     onBlur={(e) => {
-                      // Only close if the click wasn't on a dropdown item
                       const dropdownList = e.target.parentElement.querySelector('.dropdown-list');
                       if (dropdownList && !dropdownList.contains(e.relatedTarget)) {
                         setTimeout(() => setIsCityDropdownOpen(false), 200);
                       }
                     }}
-                    placeholder="Search for a city"
+                    placeholder="Select governorate"
                     className={`search-input ${errors.city ? 'error' : ''}`}
                   />
                   {formData.city !== '' && (
@@ -353,7 +349,7 @@ const PredictionForm = () => {
                         </div>
                       ))
                     ) : (
-                      <div className="dropdown-item no-results">No cities found</div>
+                      <div className="dropdown-item no-results">No results</div>
                     )}
                   </div>
                 )}
@@ -374,13 +370,12 @@ const PredictionForm = () => {
                     }}
                     onFocus={() => setIsRegionDropdownOpen(true)}
                     onBlur={(e) => {
-                      // Only close if the click wasn't on a dropdown item
                       const dropdownList = e.target.parentElement.querySelector('.dropdown-list');
                       if (dropdownList && !dropdownList.contains(e.relatedTarget)) {
                         setTimeout(() => setIsRegionDropdownOpen(false), 200);
                       }
                     }}
-                    placeholder="Search for a region"
+                    placeholder="Select delegation"
                     className={`search-input ${errors.region ? 'error' : ''}`}
                     disabled={!formData.city}
                   />
@@ -421,7 +416,7 @@ const PredictionForm = () => {
                           </div>
                         ))
                     ) : (
-                      <div className="dropdown-item no-results">No regions found</div>
+                      <div className="dropdown-item no-results">No results</div>
                     )}
                   </div>
                 )}
@@ -439,22 +434,22 @@ const PredictionForm = () => {
             exit={{ opacity: 0, x: -20 }}
             className="form-step"
           >
-            <h2>Room Details</h2>
+            <h2>Rooms</h2>
             <div className="room-inputs">
               <div className="number-input">
-                <label>Rooms</label>
+                <label>Bedrooms</label>
                 <div className="stepper">
-                  <button onClick={() => setFormData({ ...formData, rooms: Math.max(1, formData.rooms - 1) })}>-</button>
+                  <button type="button" onClick={() => setFormData({ ...formData, rooms: Math.max(1, formData.rooms - 1) })}>−</button>
                   <span>{formData.rooms}</span>
-                  <button onClick={() => setFormData({ ...formData, rooms: formData.rooms + 1 })}>+</button>
+                  <button type="button" onClick={() => setFormData({ ...formData, rooms: formData.rooms + 1 })}>+</button>
                 </div>
               </div>
               <div className="number-input">
                 <label>Bathrooms</label>
                 <div className="stepper">
-                  <button onClick={() => setFormData({ ...formData, bathrooms: Math.max(1, formData.bathrooms - 1) })}>-</button>
+                  <button type="button" onClick={() => setFormData({ ...formData, bathrooms: Math.max(1, formData.bathrooms - 1) })}>−</button>
                   <span>{formData.bathrooms}</span>
-                  <button onClick={() => setFormData({ ...formData, bathrooms: formData.bathrooms + 1 })}>+</button>
+                  <button type="button" onClick={() => setFormData({ ...formData, bathrooms: formData.bathrooms + 1 })}>+</button>
                 </div>
               </div>
             </div>
@@ -469,7 +464,7 @@ const PredictionForm = () => {
             exit={{ opacity: 0, x: -20 }}
             className="form-step"
           >
-            <h2>House Size</h2>
+            <h2>Property size</h2>
             <div className="form-group">
               <div className="size-input">
                 <input
@@ -500,19 +495,19 @@ const PredictionForm = () => {
             exit={{ opacity: 0, y: -20 }}
             className="prediction-result"
           >
-            <h2>Predicted House Price</h2>
+            <h2>Estimated Price</h2>
             <div className="predicted-price">
               {isLoading ? (
                 'Calculating...'
               ) : predictionError ? (
-                <span style={{ color: '#ff4444' }}>{predictionError}</span>
+                <span style={{ color: 'var(--error)' }}>{predictionError}</span>
               ) : (
                 `${predictedPrice?.toLocaleString()} TND`
               )}
             </div>
-            <p>This is an estimated price based on your inputs</p>
+            <p>Based on current market data</p>
             <button className="return-button" onClick={() => window.location.reload()}>
-              Back to Main Menu
+              New Estimate
             </button>
           </motion.div>
         );
@@ -524,21 +519,13 @@ const PredictionForm = () => {
 
   return (
     <div className="prediction-form-container">
-      <div className="animated-background">
-        <div className="blur-shape shape-1"></div>
-        <div className="blur-shape shape-2"></div>
-        <div className="blur-shape shape-3"></div>
-      </div>
-      
       {isLoading && (
         <div className="loading-overlay">
           <div className="loading-content">
             <div className="loading-spinner"></div>
-            <h2>Analyzing Your Property...</h2>
+            <h2>Analyzing Property</h2>
             <p className="loading-tip">
-              💡 Please be patient, this may take 1-2 minutes.
-              <br />
-              Our backend service is waking up from sleep mode.
+              This may take 1-2 minutes as our server wakes up. Thanks for your patience.
             </p>
           </div>
         </div>
@@ -560,11 +547,11 @@ const PredictionForm = () => {
             )}
             {step < totalSteps ? (
               <button type="button" onClick={handleNext} className="nav-button next">
-                Next
+                Continue
               </button>
             ) : (
               <button type="submit" className="nav-button submit" disabled={isLoading}>
-                Submit
+                Get Estimate
               </button>
             )}
           </div>
