@@ -38,35 +38,6 @@ export const BackgroundRippleEffect = ({
     return neighbors;
   }, [columns, rows]);
 
-  const handleClick = useCallback((index) => {
-    const ripple = new Set([index]);
-    const allNeighbors = [];
-    
-    // Create expanding ripple waves up to distance 10
-    for (let dist = 1; dist <= 10; dist++) {
-      allNeighbors.push(getNeighbors(index, dist));
-    }
-
-    // Initial click
-    setClickedCells(new Set([index]));
-
-    // Animate ripple expanding outward
-    allNeighbors.forEach((neighbors, waveIndex) => {
-      setTimeout(() => {
-        const activeSet = new Set([index]);
-        for (let i = 0; i <= waveIndex; i++) {
-          allNeighbors[i].forEach(n => activeSet.add(n.index));
-        }
-        setClickedCells(activeSet);
-      }, waveIndex * 40);
-    });
-
-    // Clear all cells
-    setTimeout(() => {
-      setClickedCells(new Set());
-    }, 800);
-  }, [getNeighbors]);
-
   return (
     <div
       className={`background-ripple ${className}`}

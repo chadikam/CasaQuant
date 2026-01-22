@@ -171,19 +171,6 @@ const PredictionForm = () => {
     }
   };
 
-  const handleReturn = () => {
-    setStep(1);
-    setFormData({
-      purpose: '',
-      category: '',
-      city: '',
-      region: '',
-      rooms: 1,
-      bathrooms: 1,
-      size: ''
-    });
-  };
-
   const renderProgressBar = () => {
     if (step === 6) return null;
     
