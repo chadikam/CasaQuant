@@ -1,142 +1,120 @@
-import React, { useState, useEffect, createContext, useContext } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 
 // Context to share scroll state
 const NavbarContext = createContext({ scrolled: false });
 
 export const Navbar = ({ children }) => {
   const [scrolled, setScrolled] = useState(false);
-  const [visible, setVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
-    let ticking = false;
-    
     const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const currentScrollY = window.scrollY;
-          
-          // Set scrolled state for shrinking effect
-          setScrolled(currentScrollY > 20);
-          
-          // Hide/show navbar based on scroll direction - increased threshold for longer visibility
-          if (currentScrollY > lastScrollY && currentScrollY > 1800) {
-            setVisible(false);
-          } else {
-            setVisible(true);
-          }
-          
-          setLastScrollY(currentScrollY);
-          ticking = false;
-        });
-        ticking = true;
-      }
+      setScrolled(window.scrollY > 10);
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+    // Initialize on mount
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <NavbarContext.Provider value={{ scrolled }}>
-      <motion.nav
-        animate={{
-          y: visible ? 0 : -100,
-          opacity: visible ? 1 : 0,
-        }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 100,
-          padding: scrolled ? "8px 16px" : "12px 24px",
-          transition: "padding 0.3s ease",
-          willChange: "transform, opacity",
-          contain: "layout",
-        }}
-      >
+      <nav className={`navbar ${scrolled ? "navbar-scrolled" : "navbar-transparent"}`}>
         {children}
-      </motion.nav>
+      </nav>
     </NavbarContext.Provider>
   );
 };
 
 export const NavBody = ({ children }) => {
-  const { scrolled } = useContext(NavbarContext);
-  
   return (
-    <motion.div
-      animate={{
-        maxWidth: scrolled ? "700px" : "1200px",
-        padding: scrolled ? "8px 20px" : "0px",
-        borderRadius: scrolled ? "9999px" : "0px",
-        backgroundColor: scrolled ? "rgba(20, 20, 22, 0.95)" : "rgba(20, 20, 22, 0)",
-        boxShadow: scrolled 
-          ? "0 0 0 1px rgba(255, 255, 255, 0.05), 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 80px rgba(62, 207, 207, 0.08)"
-          : "none",
-        backdropFilter: scrolled ? "blur(20px)" : "blur(0px)",
-      }}
-      transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+    <div
+      className="nav-body-desktop"
       style={{
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
         margin: "0 auto",
-        border: scrolled ? "1px solid rgba(255, 255, 255, 0.06)" : "none",
-        willChange: "transform",
+        maxWidth: "1200px",
+        padding: "0 24px",
       }}
-      className="nav-body-desktop"
     >
       {children}
-    </motion.div>
+    </div>
   );
 };
 
 export const NavbarLogo = ({ onClick }) => {
-  const { scrolled } = useContext(NavbarContext);
-  
   return (
     <motion.div
       onClick={onClick}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      animate={{
-        fontSize: scrolled ? "1.125rem" : "1.25rem",
-      }}
-      transition={{ duration: 0.3 }}
       style={{
-        fontWeight: 600,
-        color: "var(--text-primary)",
-        letterSpacing: "-0.02em",
         cursor: "pointer",
-        minHeight: "1.5rem",
         display: "flex",
         alignItems: "center",
+        gap: "10px",
         willChange: "transform",
       }}
-      onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
-      onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-primary)")}
     >
-      CasaQuant
+      <motion.div
+        style={{
+          background: "linear-gradient(135deg, rgba(62, 207, 207, 0.1), rgba(62, 207, 207, 0.05))",
+          borderRadius: "var(--radius-lg)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexShrink: 0,
+          width: "38px",
+          height: "38px",
+        }}
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M9 22V12h6v10" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </motion.div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+        <motion.div
+          style={{
+            fontWeight: 700,
+            color: "var(--text-primary)",
+            letterSpacing: "-0.02em",
+            lineHeight: 1,
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-primary)")}
+        >
+          CasaQuant
+        </motion.div>
+        <motion.div
+          style={{
+            color: "var(--text-secondary)",
+            fontWeight: 500,
+            letterSpacing: "0.01em",
+            lineHeight: 1,
+          }}
+        >
+          Property Valuation Intelligence
+        </motion.div>
+      </div>
     </motion.div>
   );
 };
 
 export const NavItems = ({ items }) => {
-  const { scrolled } = useContext(NavbarContext);
-  
   return (
     <motion.div
-      animate={{
-        gap: scrolled ? "4px" : "8px",
-      }}
-      transition={{ duration: 0.3 }}
       style={{
         display: "flex",
         alignItems: "center",
+        gap: "8px",
         willChange: "transform",
       }}
       className="nav-items-desktop"
@@ -146,12 +124,9 @@ export const NavItems = ({ items }) => {
           key={`nav-item-${idx}`}
           href={item.link}
           onClick={item.onClick}
-          animate={{
-            padding: scrolled ? "6px 10px" : "8px 12px",
-            fontSize: scrolled ? "0.8125rem" : "0.875rem",
-          }}
-          transition={{ duration: 0.3 }}
           style={{
+            padding: "8px 12px",
+            fontSize: "0.875rem",
             fontWeight: 450,
             color: "var(--text-tertiary)",
             textDecoration: "none",
@@ -176,7 +151,6 @@ export const NavItems = ({ items }) => {
 };
 
 export const NavbarButton = ({ children, variant = "primary", onClick, className = "" }) => {
-  const { scrolled } = useContext(NavbarContext);
   const isPrimary = variant === "primary";
 
   return (
@@ -184,15 +158,10 @@ export const NavbarButton = ({ children, variant = "primary", onClick, className
       onClick={onClick}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      animate={{
-        padding: scrolled 
-          ? (isPrimary ? "8px 16px" : "8px 16px")
-          : (isPrimary ? "10px 20px" : "10px 20px"),
-        fontSize: scrolled ? "0.8125rem" : "0.875rem",
-      }}
-      transition={{ duration: 0.3 }}
       className={className}
       style={{
+        padding: isPrimary ? "10px 20px" : "10px 20px",
+        fontSize: "0.875rem",
         fontWeight: 550,
         color: isPrimary ? "var(--bg-primary)" : "var(--text-secondary)",
         background: isPrimary 

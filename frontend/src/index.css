@@ -1,6 +1,6 @@
 /* System-like font stack for clean, neutral typography */
 :root {
-  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 
     'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   
   /* Premium dark color palette - layered depth */
@@ -14,12 +14,16 @@
   --bg-blue-shift: #0a0b0f;
   --bg-green-shift: #0a0c0b;
   --bg-warm-shift: #0c0a0a;
+  --bg-slate: #0a0b0f;
+  --bg-warm: #0c0a0a;
+  --bg-sand: #0a0c0b;
   
   /* Surface colors with depth */
   --surface-1: rgba(255, 255, 255, 0.02);
   --surface-2: rgba(255, 255, 255, 0.04);
   --surface-3: rgba(255, 255, 255, 0.06);
   --surface-glass: rgba(255, 255, 255, 0.03);
+  --surface-warm: rgba(255, 255, 255, 0.05);
   
   /* Border colors */
   --border-subtle: rgba(255, 255, 255, 0.05);
@@ -42,7 +46,11 @@
   
   /* Secondary accent - warm highlight */
   --accent-warm: #e8b866;
+  --accent-warm-bright: #e8b866;
   --accent-warm-muted: rgba(232, 184, 102, 0.15);
+  --accent-warm-subtle: rgba(232, 184, 102, 0.08);
+  --accent-slate: #7a8c9e;
+  --accent-slate-muted: rgba(122, 140, 158, 0.18);
   
   /* Success/Error states */
   --success: #34d399;
