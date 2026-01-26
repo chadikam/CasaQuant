@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import './PredictionForm.css';
 import './PredictionFormAdditions.css';
 import tunisiaRegions from '../assets/tunisia_regions_data.js';
@@ -19,13 +19,8 @@ const PredictionForm = ({ onBackToHome }) => {
     bathrooms: 1,
     size: ''
   });
-  const [regionSearch, setRegionSearch] = useState('');
-  const [filteredCities, setFilteredCities] = useState([]);
-  const [isCityDropdownOpen, setIsCityDropdownOpen] = useState(false);
-  const [isRegionDropdownOpen, setIsRegionDropdownOpen] = useState(false);
   const [availableRegions, setAvailableRegions] = useState([]);
   const [errors, setErrors] = useState({});
-  const [citySearch, setCitySearch] = useState('');
   
   // City options for the dropdown
   const cityOptions = useMemo(() => [
@@ -68,23 +63,6 @@ const PredictionForm = ({ onBackToHome }) => {
       setIsRegionDropdownOpen(false);
     }
   }, [formData.city]);
-  
-  // Filter cities based on search input
-  useEffect(() => {
-    if (citySearch.trim() === '') {
-      setFilteredCities(cityOptions);
-    } else {
-      const filtered = cityOptions.filter(city => 
-        city.name.toLowerCase().includes(citySearch.toLowerCase())
-      );
-      setFilteredCities(filtered);
-    }
-  }, [citySearch, cityOptions]);
-  
-  // Initialize filtered cities on component mount
-  useEffect(() => {
-    setFilteredCities(cityOptions);
-  }, [cityOptions]);
 
   // Preload the ONNX model on component mount
   useEffect(() => {
@@ -92,8 +70,6 @@ const PredictionForm = ({ onBackToHome }) => {
       console.error('Failed to preload model:', error);
     });
   }, []);
-
-  const totalSteps = 5;
 
   const scrollToSection = (stepNum) => {
     const section = sectionRefs.current[stepNum];
@@ -169,8 +145,6 @@ const PredictionForm = ({ onBackToHome }) => {
     setPredictedPrice(null);
     setPredictionError(null);
     setErrors({});
-    setCitySearch('');
-    setRegionSearch('');
   };
 
   const renderProgressBar = () => {
