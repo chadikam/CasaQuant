@@ -41,7 +41,7 @@ const FeatureHeader1 = () => (
 );
 
 const FeatureHeader2 = () => (
-  <div className="feature-header" style={{ background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.08) 0%, rgba(139, 156, 145, 0.04) 100%)' }}>
+  <div className="feature-header" style={{ background: 'linear-gradient(135deg, rgba(62, 207, 207, 0.13) 0%, rgba(62, 207, 207, 0.05) 100%)' }}>
     <motion.div
       animate={{ scale: [1, 1.1, 1] }}
       transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -49,8 +49,8 @@ const FeatureHeader2 = () => (
         width: 50,
         height: 50,
         borderRadius: '50%',
-        background: 'radial-gradient(circle, var(--accent-warm) 0%, transparent 70%)',
-        opacity: 0.2,
+        background: 'radial-gradient(circle, var(--accent) 0%, transparent 70%)',
+        opacity: 0.22,
       }}
     />
     <span style={{ position: 'absolute', fontSize: '2rem' }}>📊</span>
@@ -88,17 +88,17 @@ function App() {
   const features = [
     {
       title: "Location Intelligence",
-      description: "Deep analysis of neighborhood trends, accessibility, and regional market dynamics that influence property value. Proximity to services, infrastructure quality, and area desirability create measurable price differences even within the same city.",
+      description: "Our model is trained on extensive market data to deliver reliable predictions you can trust.",
       header: <FeatureHeader1 />,
     },
     {
       title: "Market Context", 
-      description: "Compare your property against similar listings and recent transactions to understand its competitive position. Our model learns from actual sale and rental prices, not asking prices, giving you a realistic market perspective.",
+      description: "Get instant valuations based on current market conditions and comparable properties.",
       header: <FeatureHeader2 />,
     },
     {
       title: "Transparent Methodology",
-      description: "Clear explanations of the factors driving your valuation, from property features to local market conditions. You'll see which characteristics have the strongest influence on estimated price, helping you understand value beyond the final number.",
+      description: "We analyze location, size, amenities, and market trends for comprehensive estimates.",
       header: <FeatureHeader3 />,
     },
   ];
@@ -111,7 +111,7 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar>
+      <Navbar className={showPredictionForm ? 'navbar-mobile-hide' : ''}>
         {/* Desktop Navigation */}
         <NavBody>
           <NavbarLogo onClick={() => setShowPredictionForm(false)} />
@@ -132,42 +132,19 @@ function App() {
         <MobileNav>
           <MobileNavHeader>
             <NavbarLogo onClick={() => setShowPredictionForm(false)} />
-            <MobileNavToggle
-              isOpen={isMobileMenuOpen}
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            />
+            {showPredictionForm && (
+              <MobileNavToggle
+                isOpen={isMobileMenuOpen}
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              />
+            )}
           </MobileNavHeader>
 
-          <MobileNavMenu 
-            isOpen={isMobileMenuOpen} 
-            onClose={() => setIsMobileMenuOpen(false)}
-          >
-            {!showPredictionForm ? (
-              <>
-                {navItems.map((item, idx) => (
-                  <a
-                    key={`mobile-link-${idx}`}
-                    href={item.link}
-                    onClick={(e) => {
-                      item.onClick(e);
-                      setIsMobileMenuOpen(false);
-                    }}
-                  >
-                    {item.name}
-                  </a>
-                ))}
-                <NavbarButton
-                  variant="primary"
-                  onClick={() => {
-                    setShowPredictionForm(true);
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="w-full"
-                >
-                  Get Estimate
-                </NavbarButton>
-              </>
-            ) : (
+          {showPredictionForm && (
+            <MobileNavMenu 
+              isOpen={isMobileMenuOpen} 
+              onClose={() => setIsMobileMenuOpen(false)}
+            >
               <NavbarButton
                 variant="secondary"
                 onClick={() => {
@@ -178,8 +155,8 @@ function App() {
               >
                 ← Back to Home
               </NavbarButton>
-            )}
-          </MobileNavMenu>
+            </MobileNavMenu>
+          )}
         </MobileNav>
       </Navbar>
 
@@ -243,17 +220,14 @@ function App() {
                 <div className="hero-stat">
                   <span className="stat-value">88%</span>
                   <span className="stat-label">Accuracy</span>
-                  <span className="stat-description">Mean Absolute Percentage Error on test data</span>
                 </div>
                 <div className="hero-stat">
                   <span className="stat-value">24</span>
                   <span className="stat-label">Regions</span>
-                  <span className="stat-description">All governorates covered</span>
                 </div>
                 <div className="hero-stat">
                   <span className="stat-value">5,000+</span>
                   <span className="stat-label">Properties Analyzed</span>
-                  <span className="stat-description">Training dataset size</span>
                 </div>
               </motion.div>
               <motion.div
@@ -287,7 +261,7 @@ function App() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              Unlike simple price-per-meter calculators, CasaQuant analyzes the relationship between location, property characteristics, and market conditions. Our model identifies patterns in thousands of real transactions to estimate value based on multiple factors, not averages alone.
+              CasaQuant analyzes the relationship between location, property characteristics, and market conditions.
             </motion.p>
             <BentoGrid>
               {features.map((feature, i) => (
@@ -365,7 +339,7 @@ function App() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              Understanding regional price variations helps you assess whether a property is competitively priced. Tunisia's real estate market shows significant geographic diversity, with coastal areas commanding premium prices and inland regions offering more accessible entry points.
+              Understanding regional price variations helps you assess whether a property is competitively priced.
             </motion.p>
             <div className="analysis-grid">
               <motion.div 
@@ -383,24 +357,6 @@ function App() {
                   <span className="analysis-badge">Market Snapshot</span>
                   <h3>Regional Price Dynamics</h3>
                   <p>Property values vary significantly across Tunisia's governorates. Coastal areas and major urban centers command premium prices due to higher demand, better infrastructure, and economic activity. Inland regions offer more affordable entry points while secondary cities show emerging growth potential.</p>
-                  <div className="analysis-interpretation">
-                    <h4>What this shows:</h4>
-                    <ul>
-                      <li>Tunis, Ariana, and coastal governorates consistently show higher average prices</li>
-                      <li>Price differences reflect accessibility, services, and employment opportunities</li>
-                      <li>Regional variations can exceed 200% for comparable properties</li>
-                    </ul>
-                  </div>
-                  <div className="analysis-insights">
-                    <div className="insight">
-                      <span className="insight-label">Highest avg price</span>
-                      <span className="insight-value">Northern regions</span>
-                    </div>
-                    <div className="insight">
-                      <span className="insight-label">Growing markets</span>
-                      <span className="insight-value">Secondary cities</span>
-                    </div>
-                  </div>
                 </div>
               </motion.div>
               <motion.div 
@@ -418,24 +374,6 @@ function App() {
                   <span className="analysis-badge">Investment Insight</span>
                   <h3>Price Per Square Meter Trends</h3>
                   <p>Standardized pricing metrics reveal true value across different property types and locations. Price per square meter removes size bias, allowing direct comparison between properties. Use this benchmark to identify whether a property is competitively priced relative to its market segment.</p>
-                  <div className="analysis-interpretation">
-                    <h4>How to use this:</h4>
-                    <ul>
-                      <li>Compare properties of different sizes within the same area</li>
-                      <li>Identify value outliers that may represent opportunities or overpricing</li>
-                      <li>Consider that premium locations can justify 50-100% higher rates per m²</li>
-                    </ul>
-                  </div>
-                  <div className="analysis-insights">
-                    <div className="insight">
-                      <span className="insight-label">Avg price/m²</span>
-                      <span className="insight-value">Varies by region</span>
-                    </div>
-                    <div className="insight">
-                      <span className="insight-label">Key factor</span>
-                      <span className="insight-value">Location premium</span>
-                    </div>
-                  </div>
                 </div>
               </motion.div>
             </div>

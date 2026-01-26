@@ -15,18 +15,17 @@ const PredictionForm = ({ onBackToHome }) => {
     category: '',
     city: '',
     region: '',
-    rooms: 1,
+     rooms: 1,
     bathrooms: 1,
     size: ''
   });
-  
-  const [availableRegions, setAvailableRegions] = useState([]);
-  const [errors, setErrors] = useState({});
-  const [citySearch, setCitySearch] = useState('');
   const [regionSearch, setRegionSearch] = useState('');
   const [filteredCities, setFilteredCities] = useState([]);
   const [isCityDropdownOpen, setIsCityDropdownOpen] = useState(false);
   const [isRegionDropdownOpen, setIsRegionDropdownOpen] = useState(false);
+  const [availableRegions, setAvailableRegions] = useState([]);
+  const [errors, setErrors] = useState({});
+  const [citySearch, setCitySearch] = useState('');
   
   // City options for the dropdown
   const cityOptions = useMemo(() => [
@@ -514,10 +513,20 @@ const PredictionForm = ({ onBackToHome }) => {
         </div>
       </div>
     );
-  };
+  }
 
   return (
     <div className="prediction-form-container">
+      {onBackToHome && (
+        <button
+          type="button"
+          className="prediction-mobile-back"
+          onClick={onBackToHome}
+          aria-label="Back to home"
+        >
+            ←
+        </button>
+      )}
       
       {/* Prediction Page Title, Subtitle, and Privacy Badge */}
       {!showResults && (
@@ -545,6 +554,6 @@ const PredictionForm = ({ onBackToHome }) => {
       </div>
     </div>
   );
-};
+}
 
 export default PredictionForm;

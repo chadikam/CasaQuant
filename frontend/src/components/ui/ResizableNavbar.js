@@ -5,7 +5,7 @@ import { AnimatePresence } from "framer-motion";
 // Context to share scroll state
 const NavbarContext = createContext({ scrolled: false });
 
-export const Navbar = ({ children }) => {
+export const Navbar = ({ children, className = "" }) => {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export const Navbar = ({ children }) => {
 
   return (
     <NavbarContext.Provider value={{ scrolled }}>
-      <nav className={`navbar ${scrolled ? "navbar-scrolled" : "navbar-transparent"}`}>
+      <nav className={`navbar ${scrolled ? "navbar-scrolled" : "navbar-transparent"} ${className}`}>
         {children}
       </nav>
     </NavbarContext.Provider>
@@ -80,13 +80,14 @@ export const NavbarLogo = ({ onClick }) => {
           <path d="M9 22V12h6v10" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </motion.div>
-      <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
         <motion.div
           style={{
             fontWeight: 700,
             color: "var(--text-primary)",
             letterSpacing: "-0.02em",
             lineHeight: 1,
+            fontSize: "1.05rem"
           }}
           onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
           onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-primary)")}
@@ -99,6 +100,7 @@ export const NavbarLogo = ({ onClick }) => {
             fontWeight: 500,
             letterSpacing: "0.01em",
             lineHeight: 1,
+            fontSize: "0.72rem"
           }}
         >
           Property Valuation Intelligence
@@ -313,15 +315,7 @@ export const MobileNavMenu = ({ isOpen, onClose, children }) => {
           {React.Children.map(children, (child) => {
             if (React.isValidElement(child) && child.type === "a") {
               return React.cloneElement(child, {
-                style: {
-                  ...child.props.style,
-                  padding: "12px 0",
-                  fontSize: "1rem",
-                  fontWeight: 500,
-                  color: "var(--text-secondary)",
-                  textDecoration: "none",
-                  borderBottom: "1px solid var(--border-subtle)",
-                },
+                className: "mobile-nav-link",
               });
             }
             return child;
