@@ -56,11 +56,8 @@ const PredictionForm = ({ onBackToHome }) => {
       setAvailableRegions(tunisiaRegions[formData.city] || []);
       // Reset region selection when city changes
       setFormData(prev => ({ ...prev, region: '' }));
-      setRegionSearch('');
-      setIsRegionDropdownOpen(true);
     } else {
       setAvailableRegions([]);
-      setIsRegionDropdownOpen(false);
     }
   }, [formData.city]);
 
